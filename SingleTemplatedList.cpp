@@ -7,7 +7,8 @@ template <typename T> struct Node;
 
 template <typename T> class List;
 
-template <typename T> bool operator==(List<T> &first, List<T> &second);
+template <typename T>
+bool operator==(const List<T> &first, const List<T> &second);
 
 template <typename T> std::ostream &operator<<(std::ostream &os, List<T> &list);
 
@@ -15,22 +16,22 @@ template <typename T>
 
 /**
  * @brief Struct node
- * 
+ *
  */
 struct Node {
-/**
-* @brief Construct a new Node object
-* 
-* @param data data which contains in node
-* @param pointerNext pointer to next node
-*/
+  /**
+   * @brief Construct a new Node object
+   *
+   * @param data data which contains in node
+   * @param pointerNext pointer to next node
+   */
   Node(T data, Node<T> *pointerNext = nullptr);
 
-/**
- * @brief override = operator
- * 
- * @param otherData node to compare
- */
+  /**
+   * @brief override = operator
+   *
+   * @param otherData assigned value
+   */
   void operator=(T otherData);
 
   Node<T> *pointerNext;
@@ -48,125 +49,133 @@ template <typename T> void Node<T>::operator=(T otherData) {
 
 /**
  * @brief Class list
- * 
- * @tparam T dataType 
+ *
+ * @tparam T dataType
  */
 template <typename T> class List {
 public:
-/**
- * @brief Construct a new List object
- * 
- */
+  /**
+   * @brief Construct a new List object
+   *
+   */
   List();
-/**
- * @brief Destroy the List object
- * 
- */
+  /**
+   * @brief Destroy the List object
+   *
+   */
   ~List();
-/**
- * @brief Construct a new List object by copy other object
- * 
- * @param second list to be copied
- */
+  /**
+   * @brief Construct a new List object by copy other object
+   *
+   * @param second list to be copied
+   */
   List(const List &second);
 
-/**
- * @brief Construct a new List object by move other object
- * 
- * @param second list to be movied
- */
+  /**
+   * @brief Construct a new List object by move other object
+   *
+   * @param second list to be movied
+   */
   List(List &&second);
-/**
- * @brief function which delete element in front of list
- * 
- */
+  /**
+   * @brief function which delete element in front of list
+   *
+   */
   void popFront();
-/**
- * @brief function which clear the list
- * 
- */
+  /**
+   * @brief function which clear the list
+   *
+   */
   void clear();
 
-/**
- * @brief function which add element to the back of the list
- * 
- * @param data 
- */
+  /**
+   * @brief function which add element to the back of the list
+   *
+   * @param data
+   */
   void pushBack(T data);
 
-/**
- * @brief function which add element in front tof the list
- * 
- * @param data 
- */
+  /**
+   * @brief function which add element in front tof the list
+   *
+   * @param data
+   */
   void pushFront(T data);
 
-/**
- * @brief Get the Size of the list
- * 
- * @return size of the list
- */
-  int getSize();
+  /**
+   * @brief Get the Size of the list
+   *
+   * @return size of the list
+   */
+  size_t getSize() const noexcept;
 
-/**
- * @brief override [] operator
- * 
- * @param index of necessary value
- * @return T& value of necessary object
- */
+  /**
+   * @brief override [] operator
+   *
+   * @param index of necessary value
+   * @return T& value of necessary object
+   */
   T &operator[](int index);
 
-/**
- * @brief function which check is collection clear
- * 
- * @return true if empty
- * @return false otherwise
- */
-  bool isCollectionClear();
+  /**
+   * @brief overload [] operator
+   *
+   * @param index of necassary value
+   * @return T& CONST value of necessary element
+   */
+  T &operator[](int index) const;
 
-/**
- * @brief funvtion which convert list into std::string
- * 
- * @return std::string contains list
- */
-  std::string toString();
+  /**
+   * @brief function which check is collection clear
+   *
+   * @return true if empty
+   * @return false otherwise
+   */
+  bool isCollectionClear() const noexcept;
 
-/**
- * @brief overloading = operator
- * 
- * @param second list which values will be copied
- * @return List<T>&  list with the second list's values
- */
+  /**
+   * @brief funvtion which convert list into std::string
+   *
+   * @return std::string contains list
+   */
+  const std::string toString();
+
+  /**
+   * @brief overloading = operator
+   *
+   * @param second list which values will be copied
+   * @return List<T>&  list with the second list's values
+   */
   List<T> &operator=(const List<T> &second);
 
-/**
- * @brief overloading = operator
- * 
- * @param second list which values will be movied
- * @return List<T>& list with the second list's values
- */
+  /**
+   * @brief overloading = operator
+   *
+   * @param second list which values will be movied
+   * @return List<T>& list with the second list's values
+   */
   List<T> &operator=(List<T> &&second) noexcept;
-/**
- * @brief override == operator
- * 
- * @param first list to compare
- * @param second list to compare
- * @return true if list are equal
- * @return false otherwise
- */
-  friend bool operator==<T>(List<T> &first, List<T> &second);
+  /**
+   * @brief override == operator
+   *
+   * @param first list to compare
+   * @param second list to compare
+   * @return true if list are equal
+   * @return false otherwise
+   */
+  friend bool operator==<T>(const List<T> &first, const List<T> &second);
 
-/**
- * @brief override << operator
- * 
- * @param os output stream
- * @param list to be put in output stream
- * @return std::ostream& which contains list as std::string
- */
+  /**
+   * @brief override << operator
+   *
+   * @param os output stream
+   * @param list to be put in output stream
+   * @return std::ostream& which contains list as std::string
+   */
   friend std::ostream &operator<< <T>(std::ostream &os, List<T> &list);
 
 private:
-  int size;
+  size_t size;
   Node<T> *head;
 };
 
@@ -190,10 +199,12 @@ template <typename T> void List<T>::pushFront(T data) {
   size++;
 }
 
-template <typename T> int List<T>::getSize() { return this->size; }
+template <typename T> size_t List<T>::getSize() const noexcept {
+  return this->size;
+}
 
 template <typename T> T &List<T>::operator[](int index) {
-  int counter = 0;
+  size_t counter = 0;
   Node<T> *current = this->head;
   while (current != nullptr) {
     if (counter == index) {
@@ -203,10 +214,22 @@ template <typename T> T &List<T>::operator[](int index) {
     counter++;
   }
 }
+template <typename T> T &List<T>::operator[](int index) const {
+  size_t counter = 0;
+  Node<T> *current = this->head;
+  while (current != nullptr) {
+    if (counter == index) {
+      return current->data;
+    }
+    current = current->pointerNext;
+    counter++;
+  }
+}
+template <typename T> bool List<T>::isCollectionClear() const noexcept {
+  return size == 0;
+}
 
-template <typename T> bool List<T>::isCollectionClear() { return size == 0; }
-
-template <typename T> std::string List<T>::toString() {
+template <typename T> const std::string List<T>::toString() {
   std::stringstream buffer;
   if (head != nullptr) {
     Node<T> *current = head;
